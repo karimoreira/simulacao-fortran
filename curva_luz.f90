@@ -1,17 +1,23 @@
 program curva_luz
     implicit none
     integer, parameter :: n = 6
-    real :: tempo(n) = [0.0, 0.5, 1.0, 1.5, 2.0, 2.5]
-    real :: magnitude(n) = [12.5, 12.7, 12.4, 12.6, 12.3, 12.5]
+    real :: tempo(n)
+    real :: magnitude(n)
+    real :: erro(n)
     real :: media
     integer :: i
+    character(len=100) :: filename
+    filename = 'dados.txt'
+    open(unit=10, file=filename, status='old', action='read')
+    do i = 1, n
+        read(10, *) tempo(i), magnitude(i), erro(i)
+    end do
+    close(10)
 
     media = sum(magnitude) / n
     print *, 'Magnitude média: ', media
 
-    real :: erro(n) = [0.05, 0.04, 0.06, 0.05, 0.04, 0.05]
     real :: soma_pesos, media_ponderada
-
     soma_pesos = sum(1.0 / erro**2)
     media_ponderada = sum(magnitude / erro**2) / soma_pesos
     print *, 'Magnitude média ponderada: ', media_ponderada
